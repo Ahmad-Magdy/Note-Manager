@@ -5,11 +5,13 @@
   "main": "./src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r esm ./src/start.js"
+    "start": "nodemon -r esm ./src/start.js",
+    "job": "nodemon -r esm ./src/job-runner.job.js"
   },
   "author": "Ahmed Magdy",
   "license": "MIT",
   "dependencies": {
+    "cron": "^1.3.0",
     "esm": "^3.0.72",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
