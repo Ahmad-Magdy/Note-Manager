@@ -18,8 +18,8 @@ const editSingleNote = (id, noteWithEdits) => Note
 
 const changeNoteState = async (id, newState) => {
   let note = await getSingleNote(id);
-  if (note.state === 1 && newState === 2) note.state = 2;
-  else note.state = newState;
+  if (note.state > newState) return note;
+  note.state = newState;
   note = await editSingleNote(id, note);
   return note;
 };

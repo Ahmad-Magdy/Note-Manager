@@ -45,7 +45,12 @@ router
     ctx.status = 202;
   })
   .get('/:id', async (ctx) => {
-    const note = await noteOperations.changeNoteState(ctx.params.id, 2);
+    let note;
+    if (ctx.query.seen) {
+      note = await noteOperations.changeNoteState(ctx.params.id, 3);
+    } else {
+      note = await noteOperations.getSingleNote(ctx.params.id);
+    }
     ctx.body = note;
     ctx.status = 200;
   })
@@ -55,7 +60,7 @@ router
     ctx.body = { success: true };
   })
   .post('/:id/done', async (ctx) => {
-    const note = await noteOperations.changeNoteState(ctx.params.id, 3);
+    const note = await noteOperations.changeNoteState(ctx.params.id, 4);
     ctx.body = note;
     ctx.status = 200;
   });

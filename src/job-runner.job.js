@@ -10,6 +10,7 @@ const job = new CronJob('0 */5 * * * *', async () => {
   const notes = await noteOperations.getScheduledNotes();
   notes.forEach((note) => {
     console.log(note);
+    noteOperations.changeNoteState(note.id, 2);
     // You can run any function right here;
   });
 }, null, true);
