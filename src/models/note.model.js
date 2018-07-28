@@ -8,7 +8,7 @@ const noteSchema = new mongoose.Schema({
   attachedFiles: {
     type: [String],
   },
-  remindTime: {
+  scheduleTime: {
     type: Date,
   },
   isDone: {
@@ -17,4 +17,5 @@ const noteSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('note', noteSchema);
+const Note = mongoose.model('note', noteSchema);
+export default Note;
