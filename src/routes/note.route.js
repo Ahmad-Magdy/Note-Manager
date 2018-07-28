@@ -1,4 +1,8 @@
 import Router from 'koa-router';
+import koaBody from 'koa-body';
+import path from 'path';
+import { isArray } from 'util';
+
 import { noteOperations } from '../implementation';
 
 const router = new Router({
@@ -6,12 +10,54 @@ const router = new Router({
 });
 
 router
-  .get('/', (ctx) => {
-    ctx.body = noteOperations.getAllNotes();
+  .get('/', async (ctx) => {
+    ctx.body = await noteOperations.getAllNotes();
     ctx.status = 200;
   })
-  .post('/', (ctx) => {
-    ctx.status = 201;
+  .post('/', koaBody({
+    multipart: true,
+    formLimit: 15,
+    formidable: {
+      uploadDir: path.join(__dirname, '..', '..', '/uploads'),
+      keepExtensions: true,
+    },
+  }), async (ctx) => {
+    let attachedFiles;
+    if (!isArray(attachedFiles)) attachedFiles = [ctx.request.files.myFiles.path];
+    else attachedFiles = ctx.request.files.myFiles.map(file => file.path);
+    const newNote = { ...ctx.request.body, attachedFiles };
+    try {
+      await noteOperations.createNewNote(newNote);
+      ctx.body = { success: true };
+      ctx.status = 201;
+    } catch (ex) {
+      ctx.body = ex || 'Something went wrong';
+      ctx.status = 400;
+    }
+  })
+  .get('/scheduled', async (ctx) => {
+    ctx.body = await noteOperations.getScheduledNotes();
+    ctx.status = 200;
+  })
+  .put('/:id', async (ctx) => {
+    const newDoc = await noteOperations.editSingleNote(ctx.params.id, ctx.request.body);
+    ctx.body = newDoc;
+    ctx.status = 202;
+  })
+  .get('/:id', async (ctx) => {
+    const note = await noteOperations.changeNoteState(ctx.params.id, 2);
+    ctx.body = note;
+    ctx.status = 200;
+  })
+  .delete('/:id', async (ctx) => {
+    await noteOperations.deleteSingleNote(ctx.params.id);
+    ctx.status = 200;
+    ctx.body = { success: true };
+  })
+  .post('/:id/done', async (ctx) => {
+    const note = await noteOperations.changeNoteState(ctx.params.id, 3);
+    ctx.body = note;
+    ctx.status = 200;
   });
 
 
