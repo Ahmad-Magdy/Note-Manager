@@ -1,10 +1,15 @@
 import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
+import koaBody from 'koa-body';
+import mongoose from 'mongoose';
 import { noteRoutes } from './routes';
+import config from './config';
 
 const app = new Koa();
 
-app.use(bodyParser());
+mongoose.Promise = global.Promise;
+mongoose.connect(config.dbCN).then(() => console.info('Connected to MongoDB'));
+
+app.use(koaBody());
 app.use(noteRoutes.routes());
 
 app.use(async (ctx) => {
