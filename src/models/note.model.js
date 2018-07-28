@@ -10,10 +10,11 @@ const noteSchema = new mongoose.Schema({
   },
   scheduleTime: {
     type: Date,
+    default: new Date(),
   },
-  isDone: {
-    type: Boolean,
-    default: false,
+  state: {
+    type: Number,
+    default: 1,
   },
 });
 
