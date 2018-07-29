@@ -23,8 +23,8 @@ router
     },
   }), async (ctx) => {
     let attachedFiles;
-    if (!isArray(attachedFiles)) attachedFiles = [ctx.request.files.myFiles.path];
-    else attachedFiles = ctx.request.files.myFiles.map(file => file.path);
+    if (!isArray(attachedFiles)) attachedFiles = [ctx.request.files.attachedFiles.path];
+    else attachedFiles = ctx.request.files.attachedFiles.map(file => file.path);
     const newNote = { ...ctx.request.body, attachedFiles };
     try {
       await noteOperations.createNewNote(newNote);
