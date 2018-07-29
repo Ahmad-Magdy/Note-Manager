@@ -39,6 +39,11 @@ router
     ctx.body = await noteOperations.getScheduledNotes();
     ctx.status = 200;
   })
+  .get('/search', async (ctx) => {
+    if (!ctx.request.query.content) ctx.body = [];
+    else ctx.body = await noteOperations.searchInNotes(ctx.request.query.content);
+    ctx.status = 200;
+  })
   .put('/:id', async (ctx) => {
     const newDoc = await noteOperations.editSingleNote(ctx.params.id, ctx.request.body);
     ctx.body = newDoc;

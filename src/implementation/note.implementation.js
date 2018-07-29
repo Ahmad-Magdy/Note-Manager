@@ -12,6 +12,8 @@ const getScheduledNotes = () => Note
   .find({ scheduleTime: { $gt: new Date() }, state: 1 })
   .exec();
 
+const searchInNotes = text => Note.find({ content: { $regex: text, $options: 'i' } }).exec();
+
 const editSingleNote = (id, noteWithEdits) => Note
   .findByIdAndUpdate(id, noteWithEdits, { new: true })
   .exec();
@@ -32,4 +34,5 @@ export {
   getScheduledNotes,
   editSingleNote,
   changeNoteState,
+  searchInNotes,
 };
